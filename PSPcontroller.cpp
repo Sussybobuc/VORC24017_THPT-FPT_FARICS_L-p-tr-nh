@@ -20,6 +20,14 @@ bool initializePSPController() {
 void handlePSPInput() {
     ps2x.read_gamepad(false, 0);
 
+    int leftSpeed = ps2x.Analog(PSS_LY);
+    int rightSpeed = ps2x.Analog(PSS_RY);
+
+    leftSpeed = map(leftSpeed, 0, 255, -100, 100);
+    rightSpeed = map(rightSpeed, 0, 255, -100, 100);
+
+    tankMove(leftSpeed, rightSpeed);
+
     if (ps2x.Button(PSB_CIRCLE)) {
         setServoAngle(0, 180);
     } else {
@@ -33,14 +41,14 @@ void handlePSPInput() {
     }
 
     if (ps2x.Button(PSB_R1)) {
-        setMotorSpeed(0, 100, true); // Motor intake
+        setMotorSpeed(4, 100, true); // Motor intake
     } else {
-        setMotorSpeed(0, 0, true);
+        setMotorSpeed(4, 0, true);
     }
 
     if (ps2x.Button(PSB_R2)) {
-        setMotorSpeed(1, 100, true); // Motor outtake
+        setMotorSpeed(5, 100, true); // Motor outtake
     } else {
-        setMotorSpeed(1, 0, true);
+        setMotorSpeed(5, 0, true);
     }
 }
