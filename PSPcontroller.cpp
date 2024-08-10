@@ -9,7 +9,7 @@ PS2X ps2x;
 bool initializePSPController() {
     int error = ps2x.config_gamepad(13, 11, 10, 12, true, true);
     if (error == 0) {
-        Serial.println("Found Controller, configured successful");
+        Serial.println("Found Controller, configured successfully");
         return true;
     } else {
         Serial.println("Controller not found, check wiring");
