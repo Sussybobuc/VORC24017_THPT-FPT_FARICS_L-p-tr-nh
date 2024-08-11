@@ -1,34 +1,36 @@
 #include "MotorControl.h"
-#include <Arduino.h>
+#include <Adafruit_PWMServoDriver.h>
 
-// Khởi tạo đối tượng PWM
+// Khai báo các chân I2C
+#define SDA_PIN 21
+#define SCL_PIN 22
+
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-bool initializeMotorControl() {
+void initializeMotors() {
+    Wire.begin(SDA_PIN, SCL_PIN);
     pwm.begin();
     pwm.setOscillatorFrequency(27000000);
     pwm.setPWMFreq(50);
-    return true;
+    Wire.setClock(400000);
 }
 
-bool setMotorSpeed(uint8_t motor, uint16_t speed, bool direction) {
-    if (motor >= 16 || speed > 100) {
-        Serial.println("Invalid motor or speed value!");
-        return false;
-    }
-    uint16_t pwm_value = map(speed, 0, 100, 0, 4095); // Chuyển đổi tốc độ từ % sang giá trị PWM
+void tankMove(int leftSpeed, int rightSpeed) {
+    int leftPWM = map(leftSpeed, -100, 100, 0, 4095);
+    int rightPWM = map(rightSpeed, -100, 100, 0, 4095);
+
+    pwm.setPWM(8, 0, leftPWM);
+    pwm.setPWM(9, 0, rightPWM);
+}
+
+void setMotorSpeed(int motorIndex, int speed, bool direction) {
+    int pwmValue = map(speed, 0, 100, 0, 4095);
+
     if (direction) {
-        pwm.setPWM(motor, 0, pwm_value);
-        pwm.setPWM(motor + 1, 0, 0);
+        pwm.setPWM(motorIndex * 2, 0, pwmValue);
+        pwm.setPWM(motorIndex * 2 + 1, 0, 0);
     } else {
-        pwm.setPWM(motor, 0, 0);
-        pwm.setPWM(motor + 1, 0, pwm_value);
-    }
-    return true;
-}
-
-void stopAllMotors() {
-    for (uint8_t i = 0; i < 16; i++) {
-        pwm.setPWM(i, 0, 0);
+        pwm.setPWM(motorIndex * 2, 0, 0);
+        pwm.setPWM(motorIndex * 2 + 1, 0, pwmValue);
     }
 }
