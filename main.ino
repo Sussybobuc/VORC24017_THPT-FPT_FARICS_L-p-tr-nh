@@ -26,11 +26,22 @@ void setup() {
         Serial.println("PSP controller initialization failed!");
         while (1);
     }
+        // Khởi tạo động cơ và servo
+    initializeMotors();
+    initializeServo180();
+    initializeServo360();
+    initializeColorSensor();
 }
 
 void loop() {
+    // Xử lý đầu vào từ PSP controller
     handlePSPInput();
-    checkColorSensor();
-    delay(10); // Thêm một độ trễ nhỏ để giảm tải cho vi điều khiển
-}
 
+    // Kiểm tra màu từ cảm biến
+    if (isBlackBallDetected()) {
+        setServoSpeed360(1, 255); // Mở servo phân loại khi có màu đen
+    } else {
+        setServoSpeed360(1, 0); // Dừng servo khi không phải màu đen
+    }
+    delay(10)
+}
