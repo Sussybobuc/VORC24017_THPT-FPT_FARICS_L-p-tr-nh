@@ -28,27 +28,31 @@ void handlePSPInput() {
 
     tankMove(leftSpeed, rightSpeed);
 
-    if (ps2x.Button(PSB_CIRCLE)) {
-        setServoAngle(0, 180);
-    } else {
-        setServoAngle(0, 0);
+    if (ps2x.ButtonPressed(PSB_CIRCLE)) {
+        // Điều khiển servo chắn banh
+        static bool isPushing = false;
+        isPushing = !isPushing;
+        setServoSpeed360(2, isPushing ? 255 : 0);
     }
 
-    if (ps2x.Button(PSB_L1)) {
-        setServoAngle(1, 180);
+    if (ps2x.ButtonPressed(PSB_L1)) {
+        // Điều khiển servo đẩy banh
+        setServoSpeed360(3, 255);
     } else {
-        setServoAngle(1, 0);
+        setServoSpeed360(3, 0);
     }
 
-    if (ps2x.Button(PSB_R1)) {
-        setMotorSpeed(4, 100, true); // Motor intake
+    if (ps2x.ButtonPressed(PSB_R1)) {
+        // Điều khiển hệ thống intake
+        setMotorSpeed(3, 255);
     } else {
-        setMotorSpeed(4, 0, true);
+        setMotorSpeed(3, 0);
     }
 
-    if (ps2x.Button(PSB_R2)) {
-        setMotorSpeed(5, 100, true); // Motor outtake
+    if (ps2x.ButtonPressed(PSB_R2)) {
+        // Điều khiển hệ thống outtake
+        setMotorSpeed(4, 255);
     } else {
-        setMotorSpeed(5, 0, true);
+        setMotorSpeed(4, 0);
     }
 }
