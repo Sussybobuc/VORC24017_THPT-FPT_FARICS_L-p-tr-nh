@@ -5,6 +5,11 @@
 
 // Khai báo đối tượng PS2X
 extern PS2X ps2x;
+// Khai báo các chân kết nối PS2 controller
+const int PS2_DATA = 12;
+const int PS2_CMD = 13;
+const int PS2_SEL = 14;
+const int PS2_CLK = 15;
 
 bool initializePSPController();
 void handlePSPInput();
