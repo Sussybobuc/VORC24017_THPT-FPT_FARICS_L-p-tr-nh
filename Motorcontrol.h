@@ -1,13 +1,8 @@
 #ifndef MOTOR_CONTROL_H
 #define MOTOR_CONTROL_H
 
-#include <Adafruit_PWMServoDriver.h>
-
-// Khai báo đối tượng PWM
-extern Adafruit_PWMServoDriver pwm;
-
-bool initializeMotorControl();
-bool setMotorSpeed(uint8_t motor, uint16_t speed, bool direction);
-void stopAllMotors();
+void initializeMotors();
+void tankMove(int leftSpeed, int rightSpeed);
+void setMotorSpeed(int motorIndex, int speed, bool direction);
 
 #endif // MOTOR_CONTROL_H
